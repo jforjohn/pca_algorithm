@@ -46,7 +46,7 @@ if __name__ == '__main__':
 
     ##
     kmeans_init_type = config.get('clustering', 'kmeans_init_type')
-    n_components = int(config.get('pca', 'n_components'))
+    n_components = config.get('pca', 'n_components').split('-')
     num_plot_features = int(config.get('pca', 'num_plot_features'))
 
     ## Preprocessing
@@ -55,45 +55,49 @@ if __name__ == '__main__':
     df = preprocess.new_df
     labels = preprocess.labels_
 
-    # PCA
-    pca = MyPCA(n_components)
-    pca.fit(df)
-    explained_variance = pca.n_eigval/sum(pca.eigval)
-    print('Original Covariance Matrix: ')
-    print(pca.cov_mat)
-    print()
+    for n_component in n_components:
+        # PCA
+        n_component = int(n_component)
+        pca = MyPCA(n_components=n_component)
+        pca.fit(df)
 
-    print('Original eigen values and corresponding eigen vectors: ')
-    print(pca.eigval)
-    print(pca.eigvec)
-    print()
+        if hasattr(pca, 'cov_mat'):
+            print('Original Covariance Matrix: ')
+            print(pca.cov_mat)
+            print()
 
-    print('K max eigen values and corresponding eigen vectors: ')
-    print(pca.n_eigval)
-    print(pca.n_eigvec)
-    print()
+        if hasattr(pca, 'eigval') and hasattr(pca, 'eigvec'):
+            print('Original eigen values and corresponding eigen vectors: ')
+            print(pca.eigval)
+            print(pca.eigvec)
+            print()
 
-    print('Explained variance for %d components: ' %(n_components))
-    print(np.cumsum(explained_variance))
-    print()
+        print('K max eigen values and corresponding eigen vectors: ')
+        print(pca.explained_variance_)
+        print(pca.components_)
+        print()
 
-    #specialPairPlot(pca.tranformedData)
+        print('Explained variance for %d components: ' %(n_component))
+        print(np.cumsum(pca.explained_variance_ratio_))
+        print()
 
-    ## Sklearn PCA
-    print('PCA sklearn algorithm ')
-    pca = PCA(n_components=n_components)
-    pca.fit_transform(df)
-    print(pca.explained_variance_)
-    print(np.cumsum(pca.explained_variance_ratio_))
-    print(pca.singular_values_)
-    print()
+        #specialPairPlot(pca.tranformedData)
 
-    print('IncrementalPCA sklearn  algorithm ')
-    pca = IncrementalPCA(n_components=n_components)
-    pca.fit_transform(df)
-    print(np.cumsum(pca.explained_variance_ratio_))
-    print()
+        ## Sklearn PCA
+        print('PCA sklearn algorithm ')
+        pca = PCA(n_components=n_component)
+        pca.fit_transform(df)
+        print(pca.explained_variance_)
+        print(np.cumsum(pca.explained_variance_ratio_))
+        print()
 
-    Pair_Plot(df, num_plot_features)
+        print('IncrementalPCA sklearn  algorithm ')
+        pca = IncrementalPCA(n_components=n_component)
+        pca.fit_transform(df)
+        print(pca.explained_variance_)
+        print(np.cumsum(pca.explained_variance_ratio_))
+        print()
+
+        Pair_Plot(df, num_plot_features)
 
 

@@ -19,7 +19,7 @@ def Pair_Plot(df, n_col= 4):
     grid = grid.map_lower(sns.kdeplot, cmap='Reds')
     plt.subplots_adjust(bottom=0.1)
 
-    return grid
+    plt.show()
 
 
 ##

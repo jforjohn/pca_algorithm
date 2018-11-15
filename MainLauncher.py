@@ -4,6 +4,7 @@ from MyPreprocessing import MyPreprocessing
 from MyPCA import MyPCA
 from scipy.io.arff import loadarff
 import pandas as pd
+import numpy as np
 from config_loader import load, clf_names
 import argparse
 import sys
@@ -11,7 +12,8 @@ import seaborn as sns
 
 import numpy as np
 from time import time
-import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+from sklearn.decomposition import IncrementalPCA
 
 
 ##
@@ -42,6 +44,7 @@ if __name__ == '__main__':
 
     ##
     kmeans_init_type = config.get('clustering', 'kmeans_init_type')
+    n_components = int(config.get('pca', 'n_components'))
 
     ## Preprocessing
     preprocess = MyPreprocessing()
@@ -50,10 +53,36 @@ if __name__ == '__main__':
     labels = preprocess.labels_
 
     # PCA
-    clf = MyPCA(2)
-    clf.fit(df)
-    explained_variance = clf.n_eigval/sum(clf.eigval)
+    pca = MyPCA(n_components)
+    pca.fit(df)
+    explained_variance = pca.n_eigval/sum(pca.eigval)
+    print('Original Covariance Matrix: ')
+    print(pca.cov_mat)
+    print()
 
-    ##
-    pairplot = Pair_Plot(df, 3)
+    print('Original eigen values and corresponding eigen vectors: ')
+    print(pca.eigval)
+    print(pca.eigvec)
+    print()
+
+    print('K max eigen values and corresponding eigen vectors: ')
+    print(pca.n_eigval)
+    print(pca.n_eigvec)
+    print()
+
+    print('Explained variance for %d components: ' %(n_components))
+    print(np.cumsum(explained_variance))
+    print()
+
+    print('PCA sklearn algorithm ')
+    pca = PCA(n_components=n_components)
+    pca.fit_transform(df)
+    print(np.cumsum(pca.explained_variance_ratio_))
+    print(pca.singular_values_)
+    print()
+
+    print('IncrementalPCA sklearn  algorithm ')
+    pca = IncrementalPCA(n_components=n_components)
+    pca.fit_transform(df)
+    print(np.cumsum(pca.explained_variance_ratio_))
     print()

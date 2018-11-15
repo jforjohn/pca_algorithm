@@ -7,7 +7,12 @@ import pandas as pd
 from config_loader import load, clf_names
 import argparse
 import sys
+import seaborn as sns
+
+import numpy as np
 from time import time
+import matplotlib.pyplot as plt
+
 
 ##
 from Validation import validation_metrics
@@ -15,10 +20,6 @@ from Validation import best_k
 
 ##
 if __name__ == '__main__':
-    ##
-    # 1: Kmeans, 2: Kmedoids, 3: Fuzzy C-means
-    #accepted_algorithms = [1,2,3]
-
     # Loads config
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -40,12 +41,7 @@ if __name__ == '__main__':
         sys.exit(1)
 
     ##
-    k = int(config.get('clustering', 'k'))
-    tol = float(config.get('clustering', 'tol'))
-    max_rep = int(config.get('clustering', 'max_rep'))
-    fuzzy_m = int(config.get('clustering', 'fuzzy_m'))
     kmeans_init_type = config.get('clustering', 'kmeans_init_type')
-    run = config.get('clustering', 'run')
 
     ## Preprocessing
     preprocess = MyPreprocessing()
@@ -57,3 +53,7 @@ if __name__ == '__main__':
     clf = MyPCA(2)
     clf.fit(df)
     explained_variance = clf.n_eigval/sum(clf.eigval)
+
+    ##
+    pairplot = Pair_Plot(df, 3)
+    print()

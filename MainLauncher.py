@@ -1,9 +1,7 @@
 ##
 from MyKmeans import MyKmeans
-from MyKmedoids import MyKmedoids
-from MyFuzzyCmeans import MyFuzzyCmeans
 from MyPreprocessing import MyPreprocessing
-from sklearn.cluster import AgglomerativeClustering
+from MyPCA import MyPCA
 from scipy.io.arff import loadarff
 import pandas as pd
 from config_loader import load, clf_names
@@ -48,15 +46,6 @@ if __name__ == '__main__':
     fuzzy_m = int(config.get('clustering', 'fuzzy_m'))
     kmeans_init_type = config.get('clustering', 'kmeans_init_type')
     run = config.get('clustering', 'run')
-    clf_options = {
-        '1': MyKmeans(k, tol, max_rep),
-        '2': MyKmeans(k, tol, max_rep, kmeans_init_type),
-        '3': MyKmedoids(k, tol, max_rep),
-        '4': MyFuzzyCmeans(k, tol, max_rep, fuzzy_m),
-        '5': AgglomerativeClustering(n_clusters=k, linkage='single'),
-        '6': AgglomerativeClustering(n_clusters=k, linkage='average'),
-        '7': AgglomerativeClustering(n_clusters=k, linkage='complete')
-    }
 
     ## Preprocessing
     preprocess = MyPreprocessing()
@@ -64,4 +53,7 @@ if __name__ == '__main__':
     df = preprocess.new_df
     labels = preprocess.labels_
 
+    # PCA
+    clf = MyPCA(2)
+    clf.fit(df)
 

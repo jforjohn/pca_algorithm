@@ -14,6 +14,8 @@ import numpy as np
 from time import time
 from sklearn.decomposition import PCA
 from sklearn.decomposition import IncrementalPCA
+from Pair_Plot import Pair_Plot
+import matplotlib.pyplot as plt
 
 
 ##
@@ -45,6 +47,7 @@ if __name__ == '__main__':
     ##
     kmeans_init_type = config.get('clustering', 'kmeans_init_type')
     n_components = int(config.get('pca', 'n_components'))
+    num_plot_features = int(config.get('pca', 'num_plot_features'))
 
     ## Preprocessing
     preprocess = MyPreprocessing()
@@ -74,9 +77,13 @@ if __name__ == '__main__':
     print(np.cumsum(explained_variance))
     print()
 
+    #specialPairPlot(pca.tranformedData)
+
+    ## Sklearn PCA
     print('PCA sklearn algorithm ')
     pca = PCA(n_components=n_components)
     pca.fit_transform(df)
+    print(pca.explained_variance_)
     print(np.cumsum(pca.explained_variance_ratio_))
     print(pca.singular_values_)
     print()
@@ -86,3 +93,7 @@ if __name__ == '__main__':
     pca.fit_transform(df)
     print(np.cumsum(pca.explained_variance_ratio_))
     print()
+
+    Pair_Plot(df, num_plot_features)
+
+

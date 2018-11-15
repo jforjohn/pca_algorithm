@@ -36,15 +36,17 @@ class MyPCA:
         choose_n =  sorted(zip(self.eigval, self.eigvec.T),
             key=lambda x: x[0],
             reverse=True)[:self.n_components]
-        self.n_eigval = np.array(list(map(lambda x: x[0], choose_n)))
-        self.n_eigvec = np.array(list(map(lambda x: x[1], choose_n))).T
+        self.explained_variance_ = np.array(list(map(lambda x: x[0], choose_n)))
+        self.components_ = np.array(list(map(lambda x: x[1], choose_n))).T
+
+        self.explained_variance_ratio_ = self.explained_variance_/sum(self.eigval)
         
         # Step 7. Derive the new data set. Use this d x k eigenvector matrix to transform the samples
         # onto the new subspace.
-        self.transformedData = np.matmul(data_adjust, self.n_eigvec)
+        self.transformedData = np.matmul(data_adjust, self.components_)
 
         # Step 9. Reconstruct the data set back to the original one
-        self.reconstructedData = np.matmul(self.transformedData, self.n_eigvec.T) + mean_vector
+        self.reconstructedData = np.matmul(self.transformedData, self.components_.T) + mean_vector
 
 '''
 from matplotlib import pyplot as plt

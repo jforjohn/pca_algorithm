@@ -56,4 +56,4 @@ if __name__ == '__main__':
     # PCA
     clf = MyPCA(2)
     clf.fit(df)
-
+    explained_variance = clf.n_eigval/sum(clf.eigval)

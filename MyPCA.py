@@ -44,8 +44,9 @@ class MyPCA:
         self.transformedData = np.matmul(data_adjust, self.n_eigvec)
 
         # Step 9. Reconstruct the data set back to the original one
-        self.data_new = np.matmul(self.transformedData, self.n_eigvec.T) + mean_vector
+        self.reconstructedData = np.matmul(self.transformedData, self.n_eigvec.T) + mean_vector
 
+'''
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d import proj3d
@@ -78,3 +79,4 @@ plt.title('Samples for class 1 and class 2')
 ax.legend(loc='upper right')
 
 plt.show()
+'''

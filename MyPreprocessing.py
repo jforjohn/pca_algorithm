@@ -3,10 +3,8 @@ from scipy.io.arff import loadarff
 import pandas as pd
 import numpy as np
 from sklearn import preprocessing
-from sklearn.cluster import AgglomerativeClustering
 import matplotlib.pyplot as plt
 
-from sklearn.cluster import AgglomerativeClustering
 
 class MyPreprocessing:
     def __init__(self):

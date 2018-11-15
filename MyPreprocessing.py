@@ -19,9 +19,9 @@ class MyPreprocessing:
 ##
     def normalize_num(self, col):
         col = col.values.reshape(-1,1)
-        min_max_scaler = preprocessing.MinMaxScaler()
+        min_max_scaler = preprocessing.StandardScaler()
         col_scaled = min_max_scaler.fit_transform(col)
-        print(42, col_scaled)
+        #print(42, col_scaled)
         return col_scaled
 
 

@@ -64,41 +64,4 @@ if __name__ == '__main__':
     df = preprocess.new_df
     labels = preprocess.labels_
 
-    algos = config.get('clustering', 'algorithm').split('-')
-    values = pd.DataFrame()
-    for algo in algos:
-        #print(df.values)
-        #print(df.dtypes)
 
-        ##
-
-        clf = clf_options.get(str(algo))
-
-        clf_name = clf_names.get(str(algo))
-        if not clf:
-            print("Not available algorithm defined in config file. Available options:%s"
-                  % (clf_options.keys()))
-            sys.exit(1)
-        print('Algorithm %s' % (clf_name))
-        if run == 'algorithms':
-            start = time()
-            clf.fit(df)
-            duration = time() - start
-            metrics = validation_metrics(df, labels, clf.labels_)
-            if hasattr(clf, 'max_rep'):
-                max_rep = 100 - clf.max_rep
-            else:
-                max_rep = 0
-            metrics.update({"TD": duration,
-                            "MAX_REP": max_rep})
-            validations = pd.DataFrame.from_dict(metrics, orient='index',
-                                                 columns=[clf_name])
-            values = pd.concat([values, validations], axis=1)
-            # print(clf.clusters)
-            print('---')
-
-
-        elif run == 'silhouette':
-            best_k(df, algo, config_file).show()
-
-    print(values)

@@ -3,7 +3,6 @@ from scipy.io.arff import loadarff
 import pandas as pd
 import numpy as np
 from sklearn import preprocessing
-from agglomerative_func import agg_clustering
 from sklearn.cluster import AgglomerativeClustering
 import matplotlib.pyplot as plt
 

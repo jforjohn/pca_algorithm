@@ -46,6 +46,15 @@ def pair_plot(df):
 
     df_predictions = pd.concat([df, df_labels, df_pred], axis=1)
 
+    fig, axs = plt.subplots(1, 2, figsize=(5, 5))
+
+    df1.plot(ax=axes[0, 0])
+    df2.plot(ax=axes[0, 1])
+    axs[0, 0].hist(df_predictions[0])
+    axs[0, 1].scatter(data[0], data[1])
+
+    plt.show()
+
 
 def specialGridPlot(df):
     sns.set()

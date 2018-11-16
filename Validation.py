@@ -15,7 +15,7 @@ def validation_metrics(df, y_true, y_pred, k_max= 15):
     AMI= adjusted_mutual_info_score(y_true, y_pred)
     RS= adjusted_rand_score(y_true, y_pred)
 
-    return {'DB': DB, 'SC': SC, 'AMI': AMI, 'RS': RS}
+    return {'DaviesDublin': DB, 'SilhouetteSc': SC, 'AdjustedMutualInfo': AMI, 'AdjustedRandSc': RS}
 
 ##
 #metric= validation_metrics(X, y_true, y_pred=pred)

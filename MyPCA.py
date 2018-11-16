@@ -60,25 +60,17 @@ data = np.array([[2,3,8],
                  [11,13, 8],
                  [12,10,10]])
 
-#plt.scatter(data[:,0], data[:,1], s=100)
-plt.show()
 clf = MyPCA(n_components=2)
 clf.fit(data)
 print(clf.cov_mat)
-print(clf.n_eigval)
 print(clf.eigval)
-#print(clf.eigvec)
-print(clf.eigval/sum(clf.eigval))
-print(np.cumsum(clf.eigval/sum(clf.eigval)))
 
 fig = plt.figure(figsize=(8,8))
 ax = fig.add_subplot(111, projection='3d')
-plt.rcParams['legend.fontsize'] = 10   
-ax.plot(data[0,:], data[1,:], data[2,:], 'o', markersize=8, color='blue', alpha=0.5)
-#ax.plot(class2_sample[0,:], class2_sample[1,:], class2_sample[2,:], '^', markersize=8, alpha=0.5, color='red', label='class2')
+#plt.rcParams['legend.fontsize'] = 10
+ax.plot(data[:,0], data[:,1], data[:,2], 'o', markersize=8, color='blue', alpha=0.5)
 
-plt.title('Samples for class 1 and class 2')
-ax.legend(loc='upper right')
+plt.title('3D test plot')
 
 plt.show()
 '''

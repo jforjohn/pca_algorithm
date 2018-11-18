@@ -14,7 +14,7 @@ import numpy as np
 from time import time
 from sklearn.decomposition import PCA
 from sklearn.decomposition import IncrementalPCA
-from Pair_Plot import Pair_Plot
+from Pair_Plot import Grid_Plot
 import matplotlib.pyplot as plt
 
 
@@ -26,6 +26,7 @@ def kmeans_comparison(k,tol,max_rep, data, name):
     start = time()
     clf = MyKmeans(k, tol, max_rep)
     clf.fit(data)
+    #clf.labels_
     duration = time() - start
     metrics = validation_metrics(df, labels, clf.labels_)
     max_rep = 100 - clf.max_rep
@@ -34,7 +35,7 @@ def kmeans_comparison(k,tol,max_rep, data, name):
                     "Repetitions": max_rep})
     validations = pd.DataFrame.from_dict(metrics, orient='index',
                                             columns=[clf.name+name])
-    return validations
+    return validations, clf.labels_
 
 
 ##
@@ -117,7 +118,7 @@ if __name__ == '__main__':
     print(np.cumsum(ipca_skl.explained_variance_ratio_))
     print()
 
-    Pair_Plot(df, num_plot_features)
+    Grid_Plot(df, num_plot_features)
     
     diff_explained = list(map(np.cumsum, [mypca.explained_variance_,pca_skl.explained_variance_,ipca_skl.explained_variance_]))
     df_plot = pd.DataFrame(np.array(
@@ -128,8 +129,8 @@ if __name__ == '__main__':
 
     
     ## Kmeans comparison
-    validations_nonpca = kmeans_comparison(k, tol, max_rep, df, '')
-    validations_pca = kmeans_comparison(k, tol, max_rep, mypca.transformedData, 'PCA')
+    validations_nonpca, labels_nonpca = kmeans_comparison(k, tol, max_rep, df, '')
+    validations_pca, labels_pca = kmeans_comparison(k, tol, max_rep, mypca.transformedData, 'PCA')
     
     validations = pd.concat([validations_nonpca, validations_pca], axis=1)
     print(validations)
@@ -141,3 +142,4 @@ if __name__ == '__main__':
     validations.plot.bar(rot=30)
     plt.subplots_adjust(bottom=0.2)
     plt.show()
+

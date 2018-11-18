@@ -14,7 +14,7 @@ import numpy as np
 from time import time
 from sklearn.decomposition import PCA
 from sklearn.decomposition import IncrementalPCA
-from Pair_Plot import Grid_Plot
+from Pair_Plot import Grid_Plot, pairPlot_grid
 import matplotlib.pyplot as plt
 
 
@@ -119,6 +119,7 @@ if __name__ == '__main__':
     print()
 
     Grid_Plot(df, num_plot_features)
+    pairPlot_grid(df, labels, num_plot_features)
     
     diff_explained = list(map(np.cumsum, [mypca.explained_variance_,pca_skl.explained_variance_,ipca_skl.explained_variance_]))
     df_plot = pd.DataFrame(np.array(

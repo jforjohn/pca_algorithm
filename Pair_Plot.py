@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 ##
 
-def Grid_Plot(df, labels, n_col= 4):
+def Grid_Plot(df, n_col= 4):
     sns.set()
 
     random_select = np.random.choice(len(df.columns), n_col, replace=False)
@@ -22,6 +22,9 @@ def Grid_Plot(df, labels, n_col= 4):
     plt.subplots_adjust(bottom=0.1)
     plt.show()
 
+
+def pairPlot_grid(df, labels, n_col= 4):
+    random_select = np.random.choice(len(df.columns), n_col, replace=False)
     df_labels = pd.DataFrame(labels, columns=['labels'])
     df_labels = df_labels.astype(str)
     df_total = pd.concat([df, df_labels], axis=1, sort=False)

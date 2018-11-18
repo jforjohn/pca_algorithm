@@ -6,8 +6,9 @@ import matplotlib.pyplot as plt
 
 ##
 
-def Grid_Plot(df, n_col= 4):
+def Grid_Plot(df, labels, n_col= 4):
     sns.set()
+
     random_select = np.random.choice(len(df.columns), n_col, replace=False)
 
     # create a plot in a grid with different type of graphs
@@ -19,9 +20,13 @@ def Grid_Plot(df, n_col= 4):
 
     grid = grid.map_lower(sns.kdeplot, cmap='Reds')
     plt.subplots_adjust(bottom=0.1)
-
     plt.show()
 
+    df_labels = pd.DataFrame(labels, columns=['labels'])
+    df_labels = df_labels.astype(str)
+    df_total = pd.concat([df, df_labels], axis=1, sort=False)
+    pairplot = sns.pairplot(df_total, vars=df.columns[random_select], hue='labels')
+    plt.show()
 
 def corr_matrix(df):
     sns.set(style="white")

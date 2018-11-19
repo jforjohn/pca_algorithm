@@ -15,7 +15,7 @@ class MyPCA:
         else:
             raise Exception('dt should be a DataFrame or a numpy array')
 
-        if self.n_components >= data.shape[1]:
+        if self.n_components > data.shape[1]:
             raise Exception('It should n_components < number of features (columns of data)')
 
         # Step 3: Compute the d-dimensional mean vector (i.e., the means of every dimension of the

@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 
 def Grid_Plot(df, n_col= 4):
     sns.set()
-
     random_select = np.random.choice(len(df.columns), n_col, replace=False)
 
     # create a plot in a grid with different type of graphs
@@ -25,10 +24,11 @@ def Grid_Plot(df, n_col= 4):
 
 def pairPlot_grid(df, labels, n_col= 4):
     random_select = np.random.choice(len(df.columns), n_col, replace=False)
-    df_labels = pd.DataFrame(labels, columns=['labels'])
-    df_labels = df_labels.astype(str)
+    sns.set(style="ticks", color_codes=True, palette='Set2')
+    df_labels = pd.DataFrame(list(map(str, labels)), columns=['labels'])
+    #df_labels = df_labels.astype(str)
     df_total = pd.concat([df, df_labels], axis=1, sort=False)
-    pairplot = sns.pairplot(df_total, vars=df.columns[random_select], hue='labels')
+    pairplot = sns.pairplot(df_total)#, vars=df.columns[random_select], hue='labels')
     plt.show()
 
 def corr_matrix(df):

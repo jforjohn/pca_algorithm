@@ -80,8 +80,10 @@ if __name__ == '__main__':
     # PCA
 
     ## MyPCA
+    start = time()
     mypca = MyPCA(n_components=n_components)
     mypca.fit(df)
+    mypca_duration = time() - start
 
     print('Original Covariance Matrix: ')
     print(mypca.cov_mat)
@@ -105,30 +107,41 @@ if __name__ == '__main__':
 
     ## Sklearn PCA
     print('PCA sklearn algorithm ')
+    start = time()
     pca_skl = PCA(n_components=n_components)
     pca_skl.fit_transform(df)
+    pca_skl_duration = time() - start
     print(pca_skl.explained_variance_)
     print(np.cumsum(pca_skl.explained_variance_ratio_))
     print()
 
     print('IncrementalPCA sklearn  algorithm ')
+    start = time()
     ipca_skl = IncrementalPCA(n_components=n_components)
     ipca_skl.fit_transform(df)
+    ipca_skl_duration = time() - start
     print(ipca_skl.explained_variance_)
     print(np.cumsum(ipca_skl.explained_variance_ratio_))
     print()
 
-    Grid_Plot(df, num_plot_features)
-    pairPlot_grid(df, labels, num_plot_features)
+    #Grid_Plot(df, num_plot_features)    
+    #pairPlot_grid(df, labels, num_plot_features)
     
-    diff_explained = list(map(np.cumsum, [mypca.explained_variance_,pca_skl.explained_variance_,ipca_skl.explained_variance_]))
+    diff_explained = list(map(np.cumsum,
+        [mypca.explained_variance_ratio_,pca_skl.explained_variance_ratio_,ipca_skl.explained_variance_ratio_]))
     df_plot = pd.DataFrame(np.array(
         diff_explained).T,
         columns=['mypca','pca_skl', 'ipca_skl'])
     df_plot.plot.bar(rot=0)
-    
+    plt.title('%s: Explained variance ratio with %s components' %(dataset, n_components))
+    plt.show()
 
-    
+    durations_pca = pd.DataFrame([[mypca_duration, pca_skl_duration, ipca_skl_duration]],
+        columns=['MyPCA', 'Sklearn PPCA', 'Sklearn Incremental PCA'])
+    durations_pca.plot.bar(rot=0)
+    plt.title('%s: PCAs time duration with %s components' %(dataset, n_components))
+    plt.show()
+
     ## Kmeans comparison
     validations_nonpca, labels_nonpca = kmeans_comparison(k, tol, max_rep, df, '')
     validations_pca, labels_pca = kmeans_comparison(k, tol, max_rep, mypca.transformedData, 'PCA')
@@ -142,5 +155,9 @@ if __name__ == '__main__':
     #validations = validations.drop(validations.index[len(validations.index) - 1], axis=0)
     validations.plot.bar(rot=30)
     plt.subplots_adjust(bottom=0.2)
+    plt.title('%s: Validation metrics with %s components' %(dataset, n_components))
     plt.show()
+
+    #Silhouette
+    best_k(pd.DataFrame(mypca.transformedData), config_file).show()
 
